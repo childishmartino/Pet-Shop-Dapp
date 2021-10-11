@@ -1,3 +1,6 @@
+require('dotenv').config();
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // for more about customizing your Truffle configuration!
@@ -9,6 +12,18 @@ module.exports = {
     },
     develop: {
       port: 8545
+    },
+    ropsten: {
+      provider: () =>
+      new HDWalletProvider(
+        process.env.MNEMONIC,
+        `https://ropsten.infura.io/v3/${process.env.INFURA_API_KEY}`
+      ),
+      network_id:3, // ropsten's id
+      gas: 5500000, // ropsten has a lower block limit than mainnet
+      confirmation: 2, // # of confirmations to wait between deployments
+      timeoutBlocks: 200, // # of blocks before a deployment times out
+      skipDryRun: true // skip dry run before migrations (default: false for public networks)
     }
   }
 };
